@@ -5,21 +5,33 @@ import Loader from "./Loader";
 
 const Giphy = () => {
   const [data, setData] = useState([]);
-  const [isLoading, setIsLoading] = useState(false); //false
+  const [search, setSearch] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsError(false); //assume no errors at first
       setIsLoading(true);
-      const results = await axios("https://api.giphy.com/v1/gifs/trending", {
-        params: {
-          api_key: "g1WcrQoGleoVrPKTSOOatDa1DZ6VZBF8",
-          limit: 25, //set this number higher, to check the Loader is working
-        },
-      });
 
-      console.log(results);
-      setData(results.data.data); //based on the results Object
-      setIsLoading(false); //change the state of the Loader to false, after the data is loaded! Now that state is changed, renderGifs() runs again, and returns the mapped data into the <img src={}>
+      //Error Handling: Wrap the API Call in a try/catch statement
+      try {
+        const results = await axios("https://api.giphy.com/v1/gifs/trending", {
+          params: {
+            api_key: "g1WcrQoGleoVrPKTSOOatDa1DZ6VZBF8",
+            limit: 25,
+          },
+        });
+
+        console.log(results);
+        setData(results.data.data); //based on the results Object
+      } catch (err) {
+        // console.log(err);
+        setIsError(true);
+        setTimeout(() => setIsError(false), 3000);
+      }
+
+      setIsLoading(false); //change after the data is loaded. Now State is changed so renderGifs() runs again, and returns the mapped data into the <img src={}> that the user sees.
     };
 
     fetchData();
@@ -39,7 +51,56 @@ const Giphy = () => {
     });
   };
 
-  return <div className="container gifs">{renderGifs()}</div>;
+  const renderError = () => {
+    if (isError) {
+      return (
+        <div
+          className="alert alert-danger alert-dismissible fade show"
+          role="alert"
+        >
+          Unable to get Gifs, please try again in a few minutes.
+        </div>
+      );
+    }
+  };
+
+  const handleSearchChange = (event) => {
+    setSearch(event.target.value); //e = whatever the user inputs
+  };
+
+  const handleSubmit = async (event) => {
+    event.preventDefault(); //prevent page reload
+
+    const results = await axios("https://api.giphy.com/v1/gifs/search", {
+      params: {
+        api_key: "g1WcrQoGleoVrPKTSOOatDa1DZ6VZBF8",
+        q: search,
+      },
+    });
+  };
+
+  return (
+    <div className="m-2">
+      {renderError()}
+      <form className="form-inline justify-content-center m-2">
+        <input
+          type="text"
+          placeholder="Search"
+          className="form-control"
+          onChange={handleSearchChange}
+          value={search}
+        />
+        <button
+          onClick={handleSubmit}
+          type="submit"
+          className="btn btn-primary mx-2"
+        >
+          Go
+        </button>
+      </form>
+      <div className="container gifs">{renderGifs()}</div>
+    </div>
+  );
 };
 
 export default Giphy;
