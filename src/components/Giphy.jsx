@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 
+import Loader from "./Loader";
+
 const Giphy = () => {
   const [data, setData] = useState([]);
   const [isLoading, setIsLoading] = useState(false); //false
@@ -11,12 +13,13 @@ const Giphy = () => {
       const results = await axios("https://api.giphy.com/v1/gifs/trending", {
         params: {
           api_key: "g1WcrQoGleoVrPKTSOOatDa1DZ6VZBF8",
-          limit: 20,
+          limit: 25, //set this number higher, to check the Loader is working
         },
       });
 
       console.log(results);
       setData(results.data.data); //based on the results Object
+      setIsLoading(false); //change the state of the Loader to false, after the data is loaded! Now that state is changed, renderGifs() runs again, and returns the mapped data into the <img src={}>
     };
 
     fetchData();
@@ -24,7 +27,7 @@ const Giphy = () => {
 
   const renderGifs = () => {
     if (isLoading) {
-      return <div className="">Loading...</div>;
+      return <Loader />;
     }
 
     return data.map((el) => {
