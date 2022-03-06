@@ -1,5 +1,7 @@
 import React from "react";
 import Giphy from "./components/Giphy";
+import "./App.css";
+
 //Emmet: rcfe
 
 function App() {
