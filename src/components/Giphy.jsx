@@ -15,6 +15,7 @@ const Giphy = () => {
   //these 2 variables are used for slice() the data[]
   const indexOfLastItem = currentPage * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentItems = data.slice(indexOfFirstItem, indexOfLastItem);
 
   //Page1 item 1 - item 25
   //Page2 item 26 - item 50
@@ -55,7 +56,7 @@ const Giphy = () => {
       return <Loader />;
     }
 
-    return data.map((el) => {
+    return currentItems.map((el) => {
       return (
         <div key={el.id} className="gif">
           <img src={el.images.fixed_height.url} alt={el.images.title} />
