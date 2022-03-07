@@ -2,12 +2,25 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 
 import Loader from "./Loader";
+import Paginate from "./Paginate";
 
 const Giphy = () => {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isError, setIsError] = useState(false);
+
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(25);
+  //these 2 variables are used for slice() the data[]
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+
+  //Page1 item 1 - item 25
+  //Page2 item 26 - item 50
+  //Page3 item 51 - item 75
+  //to figure out the last number of ALL Pages, by multiply it by the items/per page
+  //to figure out, the first number within a page, take the last item subtracted by the itemsPerPage
 
   useEffect(() => {
     const fetchData = async () => {
