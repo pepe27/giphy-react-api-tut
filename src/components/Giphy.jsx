@@ -77,6 +77,9 @@ const Giphy = () => {
         q: search,
       },
     });
+
+    setData(results.data.data);
+    setIsLoading(false);
   };
 
   return (
