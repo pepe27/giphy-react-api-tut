@@ -91,7 +91,7 @@ const Giphy = () => {
         params: {
           api_key: "g1WcrQoGleoVrPKTSOOatDa1DZ6VZBF8",
           q: search,
-          limit: 40,
+          limit: 100,
         },
       });
       setData(results.data.data);
@@ -121,6 +121,11 @@ const Giphy = () => {
           Go
         </button>
       </form>
+      <Paginate
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+        totalItems={data.length}
+      />
       <div className="container gifs">{renderGifs()}</div>
     </div>
   );
