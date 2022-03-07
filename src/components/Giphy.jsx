@@ -102,6 +102,10 @@ const Giphy = () => {
     setIsLoading(false);
   };
 
+  const pageSelected = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
   return (
     <div className="m-2">
       {renderError()}
@@ -122,6 +126,7 @@ const Giphy = () => {
         </button>
       </form>
       <Paginate
+        pageSelected={pageSelected}
         currentPage={currentPage}
         itemsPerPage={itemsPerPage}
         totalItems={data.length}

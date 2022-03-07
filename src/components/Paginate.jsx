@@ -12,7 +12,11 @@ const Paginate = (props) => {
         {pageNumbers.map((number) => {
           return (
             <li className="page-item">
-              <a href="!#" className="page-link">
+              <a
+                onClick={() => props.pageSelected(number)}
+                href="!#"
+                className="page-link"
+              >
                 {number}
               </a>
             </li>
